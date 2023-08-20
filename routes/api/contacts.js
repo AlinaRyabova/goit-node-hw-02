@@ -2,16 +2,11 @@ const express = require("express");
 
 const ctrl = require("../../controllers/contacts");
 
-
 const { validateBody, isValidId, authenticate } = require("../../middlewares");
-
-const { validateBody, isValidId } = require("../../middlewares");
-
 
 const { schemas } = require("../../models/contacts");
 
 const router = express.Router();
-
 
 router.get("/", authenticate, ctrl.getAll);
 
@@ -57,5 +52,3 @@ router.patch(
 router.delete("/:id", isValidId, ctrl.deleteById);
 
 module.exports = router;
-
-
