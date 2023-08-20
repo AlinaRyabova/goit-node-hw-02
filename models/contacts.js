@@ -9,29 +9,41 @@ const contactList = [
   "(992) 914-3792",
 ];
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+const dateRegexp = /^\d{2}-\d{2}-\d{4}$/;
 
-contactSchema.post("save", function (error, doc, next) {
-  if (error) {
-    return handleMongooseError(error, doc, next);
-  }
-  next();
-});
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    date: {
+      type: String,
+      match: dateRegexp,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
+
+contactSchema.post("save", handleMongooseError);
+
+
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -40,6 +52,10 @@ const addSchema = Joi.object({
     .valid(...contactList)
     .required(),
   favorite: Joi.boolean(),
+
+  date: Joi.string().pattern(dateRegexp).required(),
+
+
 });
 
 const updateFavoriteSchema = Joi.object({
