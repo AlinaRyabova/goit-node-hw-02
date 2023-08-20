@@ -29,7 +29,6 @@ const contactSchema = new Schema(
     },
     date: {
       type: String,
-      // 16-10-2009
       match: dateRegexp,
       required: true,
     },
@@ -45,30 +44,6 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleMongooseError);
 
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-contactSchema.post("save", function (error, doc, next) {
-  if (error) {
-    return handleMongooseError(error, doc, next);
-  }
-  next();
-});
-
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -79,7 +54,7 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 
   date: Joi.string().pattern(dateRegexp).required(),
-=======
+
 
 });
 
