@@ -1,3 +1,4 @@
+
 const errorMessageList = {
   400: "Bed Request",
   401: "Unauthorized",
@@ -7,8 +8,13 @@ const errorMessageList = {
 };
 
 const HttpError = (status, message = errorMessageList[status]) => {
+
+const HttpError = (status, message) => {
+
   const error = new Error(message);
   error.status = status;
   return error;
 };
+
+
 module.exports = HttpError;

@@ -8,6 +8,7 @@ const contactList = [
   "nulla.ante@vestibul.co.uk",
   "(992) 914-3792",
 ];
+
 const dateRegexp = /^\d{2}-\d{2}-\d{4}$/;
 
 const contactSchema = new Schema(
@@ -43,6 +44,32 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
+
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+contactSchema.post("save", function (error, doc, next) {
+  if (error) {
+    return handleMongooseError(error, doc, next);
+  }
+  next();
+});
+
+
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
@@ -50,7 +77,10 @@ const addSchema = Joi.object({
     .valid(...contactList)
     .required(),
   favorite: Joi.boolean(),
+
   date: Joi.string().pattern(dateRegexp).required(),
+=======
+
 });
 
 const updateFavoriteSchema = Joi.object({
